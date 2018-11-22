@@ -1,15 +1,11 @@
 /* 
 // WRITE YOUR JAVASCRIPT BELOW THIS COMMENT 
-
 Your name :  Anne-Cécile   
 Date :  14-11-2018
 Contact information : annececileriquet2@gmail.com
-
 What does this script do ? 
 ...
-
-
-// Your scripting goes here...
+integration of dynamic graphics ajax and dimple.js
 */
 
 //Premier graphique en lien avec le tableau (#table1)
@@ -141,38 +137,36 @@ myChart3.addCategoryAxis("x", "chiffres");
 myChart3.addMeasureAxis("y", "criminalité");
 myChart3.addSeries("données", dimple.plot.line);
 
+let call = () =>{
+	//Create the XHR Object
+	let xhr = new XMLHttpRequest;
+	//Call the open function, GET-type of request, url, true-asynchronous
+	//source des données d'ajax
+	xhr.open('GET', 'https://inside.becode.org/api/v1/data/random.json', true);
 
-//source des données d'ajax
-//Create the XHR Object
-let xhr = new XMLHttpRequest;
-//Call the open function, GET-type of request, url, true-asynchronous
-xhr.open('GET', 'https://inside.becode.org/api/v1/data/random.json', true);
-
-//call the onload 
-xhr.onload = function () {
+	//call the onload 
+	xhr.onload = function () {
     //check if the status is 200(means everything is okay)
-    if (this.status === 200) {
-        //return server response as an object with JSON.parse
-        console.log(JSON.parse(this.responseText));
-        let object = (JSON.parse(this.responseText));
-        for (let i = 0; i < object.length; i++) {
+		if (this.status === 200) {
+			//return server response as an object with JSON.parse
+			console.log(JSON.parse(this.responseText));
+			let object = (JSON.parse(this.responseText));
+			for (let i = 0; i < object.length; i++) {
 
-            let tab = { "criminalité": object[i][0], "chiffres": object[i][1] };
+				let tab = { "criminalité": object[i][0], "chiffres": object[i][1] };
 
-            data3.push(tab);
-            
-        }
-        myChart3.draw();
-        
-    }
+				data3.push(tab);
+				
+			}
+			myChart3.draw();
+			setInterval(call, 1000);
+		}
+	}
+	//call send
+	xhr.send();
 }
+call();
 
-//call send
-xhr.send();
     
-
-
-setInterval(data3, 1500);
-
 
 
